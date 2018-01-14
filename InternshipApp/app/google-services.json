@@ -1,0 +1,86 @@
+{
+  "project_info": {
+    "project_number": "267775695044",
+    "firebase_url": "https://internship-app-ae480.firebaseio.com",
+    "project_id": "internship-app-ae480",
+    "storage_bucket": "internship-app-ae480.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267775695044:android:63664d20cafc36c1",
+        "android_client_info": {
+          "package_name": "com.mobileapplabs.cristi.lab3"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267775695044-6oq9v8pvui21828ffqv9dp68n1purdnv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd1viBGTAOy837NgkqC_cfrOqBKUhwYyY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:267775695044:android:622dee05f053fe93",
+        "android_client_info": {
+          "package_name": "com.internship.cristi.internshipapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "267775695044-81uqh5c9pg45cqm52hp1863egdla9aph.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.internship.cristi.internshipapp",
+            "certificate_hash": "896021f661410c4dcce3edd33d86493f982abddf"
+          }
+        },
+        {
+          "client_id": "267775695044-6oq9v8pvui21828ffqv9dp68n1purdnv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCd1viBGTAOy837NgkqC_cfrOqBKUhwYyY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "267775695044-6oq9v8pvui21828ffqv9dp68n1purdnv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
