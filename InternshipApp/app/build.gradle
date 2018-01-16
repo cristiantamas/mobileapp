@@ -43,7 +43,11 @@ dependencies {
     //Storing json in shared preferences
     compile 'com.google.code.gson:gson:2.8.0'
 
+    //Pie-chart
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.3'
 
+    //Email
+    compile 'com.github.yesidlazaro:GmailBackground:1.2.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

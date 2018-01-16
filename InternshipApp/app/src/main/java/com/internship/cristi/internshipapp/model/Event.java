@@ -6,20 +6,30 @@ package com.internship.cristi.internshipapp.model;
 
 public class Event {
 
+    String id;
     String name;
     String datetime;
     String owner;
     String room;
     String details;
-    String team;
 
-    public Event(String name, String datetime, String owner, String room, String details, String team) {
+    public Event(){}
+
+    public Event(String name, String datetime, String owner, String room, String details) {
         this.name = name;
         this.datetime = datetime;
         this.owner = owner;
         this.room = room;
         this.details = details;
-        this.team = team;
+    }
+
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -61,4 +71,5 @@ public class Event {
     public void setDetails(String details) {
         this.details = details;
     }
+
 }

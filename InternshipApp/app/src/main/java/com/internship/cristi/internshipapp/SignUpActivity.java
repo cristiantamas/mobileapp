@@ -2,46 +2,32 @@ package com.internship.cristi.internshipapp;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
-import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
-import com.google.firebase.storage.UploadTask;
-import com.internship.cristi.internshipapp.model.Team;
+import com.internship.cristi.internshipapp.api.FirebaseService;
 import com.internship.cristi.internshipapp.model.User;
 import com.internship.cristi.internshipapp.model.UserDetails;
-import com.internship.cristi.internshipapp.utils.SendEmail;
-
-import java.io.ByteArrayOutputStream;
-import java.util.Map;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class SignUpActivity extends AppCompatActivity{
+
+    private FirebaseService firebaseService;
+
 
     Button signUpButton;
     Spinner dropdown;
@@ -64,9 +50,8 @@ public class SignUpActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sing_up);
 
-        Intent intent = getIntent();
 
-        firebaseRoot = FirebaseDatabase.getInstance().getReference();
+        firebaseService= FirebaseService.getInstance();
 
         signUpButton = findViewById(R.id.signupButton);
         profilePhoto = findViewById(R.id.profile_image);
@@ -94,34 +79,11 @@ public class SignUpActivity extends AppCompatActivity{
                     User newUser = new User(username, password);
 
 
-                    DatabaseReference databaseReference = firebaseRoot.child("user").push();
-                    String userId = databaseReference.getKey();
-                    databaseReference.setValue(newUser);
-
+                    //Store user to database
+                    String userId = firebaseService.addUser(newUser);
 
                     //Store image to database
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageReference = storage.getReference().child(username + ".png");
-                    profilePhoto.setDrawingCacheEnabled(true);
-                    profilePhoto.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED), View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
-                    profilePhoto.layout(0, 0, profilePhoto.getMeasuredWidth(), profilePhoto.getMeasuredHeight());
-                    profilePhoto.buildDrawingCache();
-                    Bitmap bitmap = Bitmap.createBitmap(profilePhoto.getDrawingCache());
-
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
-                    byte[] data = outputStream.toByteArray();
-
-                    UploadTask uploadTask = storageReference.putBytes(data);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception exception) {
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        }
-                    });
+                    String urlString = firebaseService.uploadPhoto(profilePhoto, newUser.getUsername());
 
 
                     UserDetails newUserDetails = new UserDetails(userId,
@@ -130,14 +92,13 @@ public class SignUpActivity extends AppCompatActivity{
                                                                  mail,
                                                                  "intern",
                                                                  about,
-                                                                 storageReference.child(username + ".png").getDownloadUrl().toString(),
+                                                                 urlString,
                                                                  dropdown.getSelectedItem().toString());
-                    firebaseRoot.child("userDetails").push().setValue(newUserDetails);
 
 
-                    Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
-                    startActivity(intent);
-                    finish();
+                    //Store user details to database
+                   firebaseService.addUserDetails(newUserDetails);
+                   finish();
                 }
                 catch (Exception e){
                     e.printStackTrace();;

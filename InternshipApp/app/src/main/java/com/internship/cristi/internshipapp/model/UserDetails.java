@@ -8,6 +8,7 @@ import android.os.Parcelable;
  */
 
 public class UserDetails implements Parcelable {
+    String id;
     String userId;
     String name;
     String suername;
@@ -31,14 +32,15 @@ public class UserDetails implements Parcelable {
     }
 
     protected UserDetails(Parcel in) {
+        id = in.readString();
         userId = in.readString();
         name = in.readString();
         suername = in.readString();
         mail = in.readString();
         type = in.readString();
         about = in.readString();
-        teamId = in.readString();
         imagePath = in.readString();
+        teamId = in.readString();
     }
 
     public static final Creator<UserDetails> CREATOR = new Creator<UserDetails>() {
@@ -52,6 +54,22 @@ public class UserDetails implements Parcelable {
             return new UserDetails[size];
         }
     };
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getUserId() {
         return userId;
@@ -116,14 +134,15 @@ public class UserDetails implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(id);
         parcel.writeString(userId);
         parcel.writeString(name);
         parcel.writeString(suername);
         parcel.writeString(mail);
         parcel.writeString(type);
         parcel.writeString(about);
-        parcel.writeString(teamId);
         parcel.writeString(imagePath);
+        parcel.writeString(teamId);
     }
 }
 

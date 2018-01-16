@@ -6,17 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="24dp"
+    android:id="@+id/updateUserLayout"
     tools:context="com.internship.cristi.internshipapp.UpdateUserActivity">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_image"
-        android:src="@mipmap/ic_profile_photo"
-        android:layout_width="wrap_content"
-        android:layout_marginBottom="@dimen/appbar_padding_top"
-        android:layout_height="wrap_content"
-        android:onClick="loadPhotoFromGallery"
-        android:layout_gravity="center"/>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/name_layout"
@@ -82,11 +73,4 @@
         android:id="@+id/techList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
-
-    <Button
-        android:id="@+id/saveButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Save" />
-
 </LinearLayout>

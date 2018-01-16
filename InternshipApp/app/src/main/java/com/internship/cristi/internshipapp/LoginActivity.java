@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -18,17 +19,20 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import com.google.gson.Gson;
+import com.internship.cristi.internshipapp.api.FirebaseService;
 import com.internship.cristi.internshipapp.model.Team;
 import com.internship.cristi.internshipapp.model.User;
 import com.internship.cristi.internshipapp.model.UserDetails;
 
 public class LoginActivity extends AppCompatActivity {
 
-    EditText usernameLogin;
-    EditText passwordLogin;
+
+    FirebaseService firebaseService;
+
+    TextInputEditText usernameLogin;
+    TextInputEditText passwordLogin;
     Button loginButton;
 
-    SharedPreferences sharedPreferences;
     SharedPreferences.Editor editor;
 
 
@@ -42,56 +46,43 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
 
-        sharedPreferences = getSharedPreferences("MyPrefsFile", 0);
-        editor= sharedPreferences.edit();
+        firebaseService = FirebaseService.getInstance();
 
         usernameLogin = findViewById(R.id.usernameText);
         passwordLogin = findViewById(R.id.passwordText);
+
+        usernameLogin.setText("cristiantamas");
+        passwordLogin.setText("parola");
+
         loginButton   = findViewById(R.id.loginButon);
     }
 
     public void checkUser(View v){
 
-        final String userText = usernameLogin.getText().toString();
-        final String passText = passwordLogin.getText().toString();
+        String userText = usernameLogin.getText().toString();
+        String passText = passwordLogin.getText().toString();
         
         
         if(userText.compareTo("") == 0 || passText.compareTo("") == 0){
             Toast.makeText(this, R.string.incorrectUsernameOrPassword, Toast.LENGTH_LONG).show();
             return;
         }
+        try {
 
-        ValueEventListener valueEventListener = firebaseRoot.child("user").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    User u = child.getValue(User.class);
-                    if (u!=null && u.getUsername().compareTo(userText) == 0 && u.getPassword().compareTo(passText) == 0) {
-
-                        Gson gson = new Gson();
-                        String json = gson.toJson(u);
-                        editor.putString("user", json);
-                        editor.apply();
-                        addToPreferences(child.getKey());
-                        goToMenu();
-
-                        return;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+            User u = firebaseService.getUserByUserName(userText);
+            firebaseService.setCurrentUser(u);
+            firebaseService.setCurrentUserDetails(firebaseService.getDetailsByUser(u.getId()));
+            goToMenu();
+        }
+        catch (Exception e){
+            Toast.makeText(this, "Wrong username or password", Toast.LENGTH_SHORT).show();
+            return;
+        }
     }
 
     public void startSignUpActivity(View v){
         Intent intent = new Intent(this, SignUpActivity.class);
         startActivity(intent);
-        finish();
     }
 
     private void goToMenu(){
@@ -99,32 +90,5 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
     }
-
-
-    private void addToPreferences(final String id){
-        ValueEventListener valueEventListener = firebaseRoot.child("userDetails").addValueEventListener(new ValueEventListener() {
-
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    UserDetails u = child.getValue(UserDetails.class);
-                    if (u!= null && u.getUserId().compareTo(id) == 0) {
-
-                        Gson gson = new Gson();
-                        String json = gson.toJson(u);
-                        editor.putString("userDetails", json);
-                        editor.apply();
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
 
 }

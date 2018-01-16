@@ -18,24 +18,20 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.internship.cristi.internshipapp.api.FirebaseService;
 import com.internship.cristi.internshipapp.model.UserDetails;
 
 import java.util.ArrayList;
+import java.util.Observer;
 
 
 public class TeamFragment extends Fragment {
 
-    //For firebase
-    DatabaseReference firebaseRoot = FirebaseDatabase.getInstance().getReference();
+    FirebaseService firebaseService;
+
 
     ListView teamListVew;
-
-
-    ArrayList<UserDetails> teamDetails = new ArrayList<>();
-    ArrayList<String> team= new ArrayList<>();
-    UserDetails currentUserDetails;
-    SharedPreferences sharedPreferences;
-
+    ArrayList<UserDetails> teamDetails;
 
     public TeamFragment() {
         // Required empty public constructor
@@ -59,73 +55,24 @@ public class TeamFragment extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_team, container, false);
 
+        firebaseService = FirebaseService.getInstance();
+//        firebaseService.getObservers().add((Observer) this);
+        teamDetails = firebaseService.getUsersByTeam(firebaseService.getCurrentUserDetails().getTeamId());
         teamListVew = view.findViewById(R.id.teamListView);
-        sharedPreferences = getActivity().getSharedPreferences("MyPrefsFile", 0);
 
-
-        setCurrentUserDetails();
         populateListView();
 
         return view;
-    }
-
-    private void setCurrentUserDetails() {
-        final String value = sharedPreferences.getString("userId", "nu merge");
-        ValueEventListener valueEventListener = firebaseRoot.child("userDetails").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-                    UserDetails u = child.getValue(UserDetails.class);
-                    if (u.getUserId().compareTo(value) == 0) {
-                        currentUserDetails = u;
-                        break;
-                    }
-                }
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        valueEventListener = firebaseRoot.child("userDetails").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-
-                Iterable<DataSnapshot> children = dataSnapshot.getChildren();
-                for (DataSnapshot child : children) {
-
-                    UserDetails u = child.getValue(UserDetails.class);
-                    if (u.getTeamId().compareTo(currentUserDetails.getTeamId()) == 0) {
-                        String s = u.getName() +" " + u.getSuername();
-                        if( u.getType().compareTo("admin") == 0)
-                            s += " (mentor)";
-                        team.add(s);
-                        teamDetails.add(u);
-                    }
-                }
-                populateListView();
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
     }
 
     private void populateListView() {
         ArrayAdapter<String> teamAdapter = new ArrayAdapter<String>(
                 getActivity(),
                 android.R.layout.simple_list_item_1,
-                team);
+                firebaseService.getUsersNameByTeam(firebaseService.getCurrentUserDetails().getTeamId()));
 
         teamListVew.setAdapter(teamAdapter);
-
+        Log.d("+++Cristi", String.valueOf(teamDetails.size()));
         teamListVew.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

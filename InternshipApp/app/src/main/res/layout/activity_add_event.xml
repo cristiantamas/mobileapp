@@ -49,8 +49,7 @@
                 android:id="@+id/datetimeInput"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="datetime"
-                android:hint="Date" />
+                android:hint="Date (dd/mm/yyy hh:mm)" />
         </android.support.design.widget.TextInputLayout>
 
         <android.support.design.widget.TextInputLayout
@@ -65,11 +64,6 @@
                 android:hint="Description" />
 
         </android.support.design.widget.TextInputLayout>
-
-        <Spinner
-            android:id="@+id/techList"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
 
         <Button
             android:id="@+id/addEventButton"

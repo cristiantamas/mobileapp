@@ -23,7 +23,7 @@
             android:background="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|enterAlways"
             app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/app_name">
+            app:title="Main menu">
 
         </android.support.v7.widget.Toolbar>
 
@@ -36,19 +36,25 @@
                 android:id="@+id/tabItem"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="My team"/>
+                android:text="Team"/>
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text= "All users"/>
+                android:text= "Users"/>
 
             <android.support.design.widget.TabItem
                 android:id="@+id/tabItem3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text= "Upcoming events"/>
+                android:text= "Events"/>
+
+            <android.support.design.widget.TabItem
+                android:id="@+id/tabItem4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Stats" />
 
         </android.support.design.widget.TabLayout>
     </android.support.design.widget.AppBarLayout>
@@ -65,7 +71,6 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:onClick="openAddEvent"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@android:drawable/btn_plus" />
+        android:layout_margin="@dimen/fab_margin" />
 
 </android.support.design.widget.CoordinatorLayout>
