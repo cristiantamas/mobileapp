@@ -76,6 +76,8 @@ public class FirebaseService extends Observable {
         userList = new ArrayList<>();
         observers = new ArrayList<>();
 
+        setOfflinePersistance();
+
         DatabaseReference database = getDatabase("userDetails");
         database.addChildEventListener(new ChildEventListener() {
             @Override
@@ -262,6 +264,21 @@ public class FirebaseService extends Observable {
         ref.child(id).setValue(userDetails);
 
         return userDetails;
+    }
+
+    public void setOfflinePersistance(){
+        DatabaseReference ref = getDatabase("userDetails");
+        ref.keepSynced(true);
+
+        ref = getDatabase("user");
+        ref.keepSynced(true);
+
+        ref = getDatabase("event");
+        ref.keepSynced(true);
+
+        ref = getDatabase("team");
+        ref.keepSynced(true);
+
     }
 
     public String addUser(User user){
